@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --bg: #0b0f14;
@@ -19,6 +20,7 @@
       --red: #ef4444;
       --blue: #3b82f6;
       --accent: #60a5fa;
+      --orange: #f97316;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -35,7 +37,7 @@
     }
     header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
     header h1 {
       font-size: 1.75rem;
@@ -183,18 +185,77 @@
       font-size: 0.82rem;
       color: var(--muted);
     }
+    /* Chart section */
+    .charts {
+      margin-top: 1.75rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem 1.1rem;
+    }
+    .chart-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .chart-header h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .chart-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .chart-meta strong {
+      color: var(--orange);
+      font-weight: 600;
+    }
+    .legend-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.25rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.65rem;
+    }
+    .legend-row span::before {
+      content: '';
+      display: inline-block;
+      width: 18px;
+      height: 2px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .leg-pe::before { background: var(--orange); }
+    .leg-p30::before { background: var(--green); }
+    .leg-med::before { background: #94a3b8; }
+    .leg-p70::before { background: var(--red); }
+    .chart-wrap {
+      position: relative;
+      height: 280px;
+    }
+    @media (max-width: 640px) {
+      .chart-wrap { height: 240px; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>纳指100 & 标普500 估值看板</h1>
-      <p>Trailing PE · Forward PE · Shiller CAPE · 高估 / 低估百分比</p>
+      <p>Trailing PE · Forward PE · Shiller CAPE · 高估 / 低估百分比 · 历史走势</p>
       <div class="badge">数据截至 2026年10月底 – 11月初</div>
     </header>
 
     <div class="grid">
-      <!-- S&P 500 -->
       <div class="card">
         <h2>标普500 <span>S&P 500</span></h2>
         <table>
@@ -233,7 +294,6 @@
         </table>
       </div>
 
-      <!-- Nasdaq 100 -->
       <div class="card">
         <h2>纳指100 <span>Nasdaq 100</span></h2>
         <table>
@@ -249,7 +309,7 @@
           <tbody>
             <tr>
               <td>Trailing PE</td>
-              <td class="mono">28–35x</td>
+              <td class="mono">≈27–35x</td>
               <td class="mono">~26x</td>
               <td class="pct fair">+8~35%</td>
               <td><span class="status fair"><span class="dot"></span>偏高</span></td>
@@ -273,6 +333,59 @@
       </div>
     </div>
 
+    <!-- Charts -->
+    <div class="charts">
+      <!-- Nasdaq PE Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>纳指100 · Trailing PE 走势</h3>
+          <div class="chart-meta">当前约 <strong>27.4x</strong> · 近10年分位约 <strong>27%</strong> · 估值适中偏便宜</div>
+        </div>
+        <div class="legend-row">
+          <span class="leg-pe">PE</span>
+          <span class="leg-p30">30分位 27.8</span>
+          <span class="leg-med">中位 31.1</span>
+          <span class="leg-p70">70分位 34.7</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="ndxPeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- S&P PE Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>标普500 · Trailing PE 走势</h3>
+          <div class="chart-meta">当前约 <strong>25.7x</strong> · 相对长期均值仍偏高</div>
+        </div>
+        <div class="legend-row">
+          <span class="leg-pe">PE</span>
+          <span class="leg-p30">30分位 ~20</span>
+          <span class="leg-med">中位 ~22.5</span>
+          <span class="leg-p70">70分位 ~26</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="spxPeChart"></canvas>
+        </div>
+      </div>
+
+      <!-- CAPE Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>标普500 · Shiller CAPE 走势</h3>
+          <div class="chart-meta">当前约 <strong>40.7x</strong> · 接近历史极高区间</div>
+        </div>
+        <div class="legend-row">
+          <span class="leg-pe">CAPE</span>
+          <span class="leg-p30">长期均值 ~17</span>
+          <span class="leg-med">近20年均值 ~28</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="capeChart"></canvas>
+        </div>
+      </div>
+    </div>
+
     <div class="summary">
       <h3>综合判断</h3>
       <div class="verdict-grid">
@@ -282,18 +395,152 @@
         </div>
         <div class="verdict">
           <h4>纳指100</h4>
-          <p>Forward PE 已回落至近 5–10 年偏低区间，短期性价比更好；CAPE 仍处历史极高位，长期仍偏贵。</p>
+          <p>Trailing PE 已回落至近10年偏低分位（约27%），Forward PE 更便宜；CAPE 仍处历史极高位，长期仍偏贵。</p>
         </div>
       </div>
     </div>
 
     <div class="note">
-      <strong>说明：</strong> 百分比 = (当前值 − 参考均值) / 参考均值。参考均值采用长期历史或近几十年常用中枢。不同数据源（GuruFocus、YCharts、Siblis 等）计算方法略有差异，以上为区间中值呈现。仅供参考，不构成投资建议。
+      <strong>说明：</strong> 曲线为近10年季度/年度近似值（综合 GuruFocus、Siblis、YCharts 等公开数据），用于展示相对历史位置。不同数据源计算方法略有差异。仅供参考，不构成投资建议。
     </div>
 
     <footer>
       <p>由 Grok 生成 · 托管于 GitHub Pages · <a href="https://github.com/liuyanstar/market-valuation-dashboard" target="_blank" rel="noopener">源码仓库</a></p>
     </footer>
   </div>
+
+  <script>
+    const labels = [
+      '2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026'
+    ];
+
+    // Approximate yearly-ish PE series (aligned to screenshot style for NDX)
+    const ndxPe = [23.1, 25.8, 20.8, 26.5, 39.7, 38.0, 23.7, 30.3, 32.4, 32.3, 27.4];
+    const spxPe = [23.6, 25.0, 19.6, 24.9, 36.0, 23.1, 22.8, 25.0, 28.2, 31.0, 25.7];
+    const cape  = [26.7, 32.1, 28.3, 30.3, 33.8, 38.3, 28.3, 31.5, 37.7, 39.6, 40.7];
+
+    const commonOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1a2330',
+          titleColor: '#e8eef4',
+          bodyColor: '#e8eef4',
+          borderColor: '#1e2a36',
+          borderWidth: 1
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(30,42,54,0.6)' },
+          ticks: { color: '#8b9bb0', maxRotation: 0 }
+        },
+        y: {
+          grid: { color: 'rgba(30,42,54,0.6)' },
+          ticks: { color: '#8b9bb0' }
+        }
+      }
+    };
+
+    function makeLineDataset(data, color) {
+      return {
+        data,
+        borderColor: color,
+        backgroundColor: 'transparent',
+        borderWidth: 2.2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.25
+      };
+    }
+
+    function makeDash(value, color) {
+      return {
+        data: Array(labels.length).fill(value),
+        borderColor: color,
+        borderWidth: 1.4,
+        borderDash: [5, 4],
+        pointRadius: 0,
+        tension: 0
+      };
+    }
+
+    // Nasdaq PE
+    new Chart(document.getElementById('ndxPeChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          makeLineDataset(ndxPe, '#f97316'),
+          makeDash(27.84, '#22c55e'),
+          makeDash(31.10, '#94a3b8'),
+          makeDash(34.71, '#ef4444')
+        ]
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          ...commonOptions.scales,
+          y: {
+            ...commonOptions.scales.y,
+            min: 18,
+            max: 44
+          }
+        }
+      }
+    });
+
+    // S&P PE
+    new Chart(document.getElementById('spxPeChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          makeLineDataset(spxPe, '#f97316'),
+          makeDash(20, '#22c55e'),
+          makeDash(22.5, '#94a3b8'),
+          makeDash(26, '#ef4444')
+        ]
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          ...commonOptions.scales,
+          y: {
+            ...commonOptions.scales.y,
+            min: 15,
+            max: 40
+          }
+        }
+      }
+    });
+
+    // CAPE
+    new Chart(document.getElementById('capeChart'), {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          makeLineDataset(cape, '#f97316'),
+          makeDash(17, '#22c55e'),
+          makeDash(28, '#94a3b8')
+        ]
+      },
+      options: {
+        ...commonOptions,
+        scales: {
+          ...commonOptions.scales,
+          y: {
+            ...commonOptions.scales.y,
+            min: 15,
+            max: 45
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
