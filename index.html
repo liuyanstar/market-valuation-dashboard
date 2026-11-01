@@ -1,1 +1,146 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>估值看板</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0b0f14;--card:#12181f;--border:#1e2a36;--text:#e8eef4;--muted:#8b9bb0;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--orange:#f97316;--accent:#60a5fa}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+.container{max-width:1100px;margin:0 auto;padding:1.75rem 1.2rem 3rem}header{text-align:center;margin-bottom:1.25rem}
+header h1{font-size:1.65rem;font-weight:700;margin-bottom:.3rem}header p{color:var(--muted);font-size:.92rem}
+.badge{display:inline-block;margin-top:.6rem;padding:.22rem .6rem;border-radius:999px;background:#1a2330;border:1px solid var(--border);font-size:.78rem;color:var(--muted)}
+.market-tabs{display:flex;gap:.5rem;justify-content:center;margin:1.25rem 0 1rem}
+.market-tabs button{font-family:inherit;font-size:.95rem;font-weight:600;padding:.5rem 1.4rem;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:#1a2330;color:var(--muted)}
+.market-tabs button.active{background:#1e3a5f;border-color:var(--accent);color:var(--accent)}
+.index-chips{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:1.35rem}
+.index-chips button{font-family:inherit;font-size:.8rem;padding:.32rem .75rem;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:#151c25;color:var(--muted)}
+.index-chips button.active{background:#1e3a5f;border-color:var(--accent);color:#93c5fd;font-weight:600}
+.panel{display:none}.panel.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.15rem;margin-bottom:1.35rem}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.35rem}
+.card h2{font-size:1.08rem;font-weight:600;margin-bottom:.7rem;display:flex;align-items:center;gap:.45rem}
+.card h2 span{font-size:.7rem;font-weight:500;padding:.1rem .4rem;border-radius:6px;background:#1a2330;color:var(--muted)}
+.verdict-tag{font-size:1.2rem;font-weight:700;margin-bottom:.12rem}.verdict-tag.fair{color:var(--orange)}.verdict-tag.over{color:var(--red)}.verdict-tag.hot{color:#f87171}.verdict-tag.cold{color:#34d399}
+.sub-hint{font-size:.8rem;color:var(--muted);margin-bottom:.85rem}
+.metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;margin-bottom:.85rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.metrics-row2{display:grid;grid-template-columns:repeat(5,1fr);gap:.45rem .3rem}@media(max-width:640px){.metrics-row{grid-template-columns:repeat(2,1fr)}.metrics-row2{grid-template-columns:repeat(3,1fr)}}
+.metric .label{font-size:.7rem;color:var(--muted);margin-bottom:.12rem}.metric .value{font-family:JetBrains Mono,monospace;font-size:.95rem;font-weight:500}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin-top:.7rem}th,td{padding:.42rem .28rem;text-align:left;border-bottom:1px solid var(--border)}th{color:var(--muted);font-weight:500;font-size:.7rem;text-transform:uppercase}
+td.mono{font-family:JetBrains Mono,monospace;font-weight:500}.status{display:inline-flex;align-items:center;gap:.28rem;font-weight:600;font-size:.8rem}
+.dot{width:7px;height:7px;border-radius:50%}.over{color:var(--red)}.over .dot{background:var(--red)}.fair{color:var(--yellow)}.fair .dot{background:var(--yellow)}.under{color:var(--green)}.under .dot{background:var(--green)}
+.charts{margin-top:.5rem;display:grid;gap:1.15rem}.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.15rem 1.3rem .95rem}
+.chart-header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem 1rem;margin-bottom:.5rem}.chart-header h3{font-size:1rem;font-weight:600}.chart-meta{font-size:.8rem;color:var(--muted)}.chart-meta strong{color:var(--orange)}
+.legend-row{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;font-size:.74rem;color:var(--muted);margin-bottom:.45rem}
+.legend-row span::before{content:'';display:inline-block;width:14px;height:2px;margin-right:5px;vertical-align:middle}
+.leg-pe::before{background:var(--orange)}.leg-p30::before{background:var(--green)}.leg-med::before{background:#94a3b8}.leg-p70::before{background:var(--red)}
+.chart-wrap{position:relative;height:260px}@media(max-width:640px){.chart-wrap{height:220px}}
+.range-btns{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem;justify-content:center}
+.range-btns button{background:#1a2330;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:.8rem;padding:.3rem .8rem;border-radius:999px;cursor:pointer}
+.range-btns button.active{background:#1e3a5f;border-color:var(--accent);color:var(--accent);font-weight:600}
+.summary{margin-top:1.4rem}.summary h3{font-size:.95rem;margin-bottom:.65rem;color:var(--muted);font-weight:500}
+.verdict-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}@media(max-width:640px){.verdict-grid{grid-template-columns:1fr}}
+.verdict{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.15rem}.verdict h4{font-size:.92rem;margin-bottom:.35rem}.verdict p{font-size:.85rem;color:var(--muted)}
+.note{margin-top:1.15rem;padding:.85rem 1rem;background:#0f1620;border-radius:10px;border:1px dashed var(--border);font-size:.8rem;color:var(--muted)}
+footer{margin-top:2.2rem;text-align:center;font-size:.78rem;color:var(--muted)}footer a{color:var(--accent);text-decoration:none}
+.cn-single{max-width:720px;margin:0 auto 1.25rem}
+</style></head><body>
+<div class="container">
+<header><h1>估值看板</h1><p>美股纳指/标普 · A股宽基与行业指数 · PE / PB / 百分位 · 历史走势</p>
+<div class="badge">数据参考截至 2026-10-30 前后</div></header>
+<div class="market-tabs">
+<button type="button" class="active" data-market="us">美股</button>
+<button type="button" data-market="cn">A股</button>
+</div>
+<div id="panel-us" class="panel active">
+<div class="grid">
+<div class="card"><h2>纳指100 <span>Nasdaq 100</span></h2>
+<div class="verdict-tag fair">估值适中</div><div class="sub-hint">比过去约 73% 的时间更低</div>
+<div class="metrics-row">
+<div class="metric"><div class="label">PE (TTM)</div><div class="value">27.36</div></div>
+<div class="metric"><div class="label">PE 百分位</div><div class="value">26.96%</div></div>
+<div class="metric"><div class="label">Forward PE</div><div class="value">~21x</div></div>
+</div>
+<div class="metrics-row2">
+<div class="metric"><div class="label">PB</div><div class="value">8.33</div></div>
+<div class="metric"><div class="label">PB 百分位</div><div class="value">61.60%</div></div>
+<div class="metric"><div class="label">ROE</div><div class="value">30.46%</div></div>
+<div class="metric"><div class="label">股息率</div><div class="value">0.47%</div></div>
+<div class="metric"><div class="label">预测 PEG</div><div class="value">1.36</div></div>
+</div></div>
+<div class="card"><h2>标普500 <span>S&P 500</span></h2>
+<div class="verdict-tag over">偏贵 / 高估</div><div class="sub-hint">Trailing PE 与 CAPE 均明显高于长期中枢</div>
+<div class="metrics-row">
+<div class="metric"><div class="label">PE (TTM)</div><div class="value">25.7</div></div>
+<div class="metric"><div class="label">Forward PE</div><div class="value">19.2</div></div>
+<div class="metric"><div class="label">Shiller CAPE</div><div class="value">40.7</div></div>
+</div>
+<div class="metrics-row2">
+<div class="metric"><div class="label">长期 PE 均值</div><div class="value">~17x</div></div>
+<div class="metric"><div class="label">CAPE 长期均值</div><div class="value">~17x</div></div>
+<div class="metric"><div class="label">PE 偏离</div><div class="value" style="color:var(--red)">+51%</div></div>
+<div class="metric"><div class="label">CAPE 偏离</div><div class="value" style="color:var(--red)">+139%</div></div>
+<div class="metric"><div class="label">Fwd PE 偏离</div><div class="value" style="color:var(--yellow)">+20%</div></div>
+</div></div></div>
+<div class="charts">
+<div class="chart-card"><div class="chart-header"><h3>纳指100 · Trailing PE</h3><div class="chart-meta">当前 <strong>27.4x</strong></div></div>
+<div class="legend-row"><span class="leg-pe">PE</span><span class="leg-p30">30分位</span><span class="leg-med">中位</span><span class="leg-p70">70分位</span></div>
+<div class="chart-wrap"><canvas id="ndxPeChart"></canvas></div>
+<div class="range-btns" data-group="us"><button data-years="3">近3年</button><button data-years="5">近5年</button><button data-years="10" class="active">近10年</button><button data-years="20">近20年</button></div></div>
+<div class="chart-card"><div class="chart-header"><h3>标普500 · Trailing PE</h3><div class="chart-meta">当前 <strong>25.7x</strong></div></div>
+<div class="legend-row"><span class="leg-pe">PE</span><span class="leg-p30">30分位</span><span class="leg-med">中位</span><span class="leg-p70">70分位</span></div>
+<div class="chart-wrap"><canvas id="spxPeChart"></canvas></div>
+<div class="range-btns" data-group="us"><button data-years="3">近3年</button><button data-years="5">近5年</button><button data-years="10" class="active">近10年</button><button data-years="20">近20年</button></div></div>
+<div class="chart-card"><div class="chart-header"><h3>标普500 · Shiller CAPE</h3><div class="chart-meta">当前 <strong>40.7x</strong></div></div>
+<div class="legend-row"><span class="leg-pe">CAPE</span><span class="leg-p30">长期均值</span><span class="leg-med">近20年均值</span></div>
+<div class="chart-wrap"><canvas id="capeChart"></canvas></div>
+<div class="range-btns" data-group="us"><button data-years="3">近3年</button><button data-years="5">近5年</button><button data-years="10" class="active">近10年</button><button data-years="20">近20年</button></div></div>
+</div></div>
+<div id="panel-cn" class="panel">
+<div class="index-chips" id="cn-chips">
+<button type="button" class="active" data-cn="hs300">沪深300</button>
+<button type="button" data-cn="sz50">上证50</button>
+<button type="button" data-cn="csi500">中证500</button>
+<button type="button" data-cn="star50">科创50</button>
+<button type="button" data-cn="div">中证红利</button>
+<button type="button" data-cn="med">中证医疗</button>
+<button type="button" data-cn="cyb">创业板指</button>
+</div>
+<div class="cn-single"><div class="card" id="cn-card"></div></div>
+<div class="charts"><div class="chart-card">
+<div class="chart-header"><h3 id="cn-chart-title">沪深300 · PE 走势（示意）</h3><div class="chart-meta" id="cn-chart-meta"></div></div>
+<div class="legend-row"><span class="leg-pe">PE</span><span class="leg-p30">偏低区</span><span class="leg-med">中位附近</span><span class="leg-p70">偏高区</span></div>
+<div class="chart-wrap"><canvas id="cnPeChart"></canvas></div>
+<div class="range-btns" data-group="cn">
+<button data-years="3">近3年</button><button data-years="5">近5年</button><button data-years="10" class="active">近10年</button>
+<button data-years="20">近20年</button><button data-years="99">全部</button>
+</div></div></div>
+<div class="summary"><h3>A股简要判断</h3><div class="verdict-grid">
+<div class="verdict"><h4>宽基</h4><p>沪深300 / 上证50 PE 分位中等，PB 分位偏低。创业板指 PE 分位极低。</p></div>
+<div class="verdict"><h4>风格与主题</h4><p>中证红利 PE 分位偏高；中证医疗 PE/PB 分位偏低。</p></div>
+</div></div></div>
+<div class="note"><strong>说明：</strong> A股当前 PE/PB/百分位来自公开数据（约 2026-10-30）。曲线为按各指数历史特征分别生成的示意序列（非同一条曲线缩放），用于展示相对位置与波动差异，非交易所官方精确时序。仅供参考，不构成投资建议。</div>
+<footer><p>由 Grok 生成 · <a href="https://github.com/liuyanstar/market-valuation-dashboard" target="_blank" rel="noopener">源码仓库</a></p></footer>
+</div>
+<script>
+const CN={hs300:{name:'沪深300',code:'000300',verdict:'正常',verdictClass:'fair',hint:'PE 近10年分位约 53%，PB 分位偏低',pe:12.86,pePct:53.1,pb:1.35,pbPct:22.5,ps:1.43,psPct:69.6,p30:10.5,med:12.5,p70:15.5,peRange:[9,20]},sz50:{name:'上证50',code:'000016',verdict:'正常',verdictClass:'fair',hint:'PE 分位约 66%',pe:11.04,pePct:66.1,pb:1.25,pbPct:54.3,ps:1.60,psPct:96.4,p30:9.5,med:11.2,p70:13.5,peRange:[8,16]},csi500:{name:'中证500',code:'000905',verdict:'正常',verdictClass:'fair',hint:'PE / PB 均在近10年中位附近',pe:26.73,pePct:56.4,pb:1.94,pbPct:52.1,ps:1.34,psPct:69.9,p30:22,med:28,p70:35,peRange:[18,45]},star50:{name:'科创50',code:'000688',verdict:'正常偏高',verdictClass:'fair',hint:'PE 绝对水平高（成长特性），分位约 65%',pe:90.46,pePct:65.4,pb:5.55,pbPct:55.2,ps:7.06,psPct:59.5,p30:60,med:85,p70:120,peRange:[40,180]},div:{name:'中证红利',code:'000922',verdict:'偏热',verdictClass:'hot',hint:'PE 分位约 90%，相对自身历史不便宜',pe:9.42,pePct:89.6,pb:0.92,pbPct:64.3,ps:1.39,psPct:96.4,p30:7.5,med:8.5,p70:9.2,peRange:[6,12]},med:{name:'中证医疗',code:'399989',verdict:'偏冷',verdictClass:'cold',hint:'PE 分位约 10%，PB 分位约 5%',pe:26.89,pePct:10.0,pb:3.24,pbPct:5.3,ps:5.29,psPct:11.8,p30:28,med:40,p70:55,peRange:[20,80]},cyb:{name:'创业板指',code:'399006',verdict:'极冷',verdictClass:'cold',hint:'PE 近10年分位仅约 5%',pe:26.91,pePct:5.2,pb:3.82,pbPct:16.0,ps:2.71,psPct:4.8,p30:30,med:40,p70:55,peRange:[20,70]}};
+function renderCnCard(key){const d=CN[key];const el=document.getElementById('cn-card');const pctColor=p=>p<30?'var(--green)':p>70?'var(--red)':'var(--yellow)';el.innerHTML=`<h2>${d.name} <span>${d.code}</span></h2><div class="verdict-tag ${d.verdictClass}">${d.verdict}</div><div class="sub-hint">${d.hint}</div><div class="metrics-row"><div class="metric"><div class="label">PE (TTM)</div><div class="value">${d.pe}</div></div><div class="metric"><div class="label">PE 百分位</div><div class="value" style="color:${pctColor(d.pePct)}">${d.pePct}%</div></div><div class="metric"><div class="label">PB</div><div class="value">${d.pb}</div></div></div><div class="metrics-row2"><div class="metric"><div class="label">PB 百分位</div><div class="value" style="color:${pctColor(d.pbPct)}">${d.pbPct}%</div></div><div class="metric"><div class="label">PS</div><div class="value">${d.ps}</div></div><div class="metric"><div class="label">PS 百分位</div><div class="value">${d.psPct}%</div></div><div class="metric"><div class="label">相对估值</div><div class="value">${d.verdict}</div></div><div class="metric"><div class="label">数据日</div><div class="value" style="font-size:.8rem">~10/30</div></div></div><table><thead><tr><th>指标</th><th>当前</th><th>近10年分位</th><th>状态</th></tr></thead><tbody><tr><td>市盈率 PE</td><td class="mono">${d.pe}x</td><td class="pct" style="color:${pctColor(d.pePct)}">${d.pePct}%</td><td><span class="status ${d.pePct<30?'under':d.pePct>70?'over':'fair'}"><span class="dot"></span>${d.pePct<30?'偏低':d.pePct>70?'偏高':'适中'}</span></td></tr><tr><td>市净率 PB</td><td class="mono">${d.pb}x</td><td class="pct" style="color:${pctColor(d.pbPct)}">${d.pbPct}%</td><td><span class="status ${d.pbPct<30?'under':d.pbPct>70?'over':'fair'}"><span class="dot"></span>${d.pbPct<30?'偏低':d.pbPct>70?'偏高':'适中'}</span></td></tr><tr><td>市销率 PS</td><td class="mono">${d.ps}x</td><td class="pct">${d.psPct}%</td><td><span class="status fair"><span class="dot"></span>—</span></td></tr></tbody></table>`;document.getElementById('cn-chart-title').textContent=d.name+' · PE 走势（示意）';document.getElementById('cn-chart-meta').innerHTML=`当前 <strong>${d.pe}x</strong> · 分位 ${d.pePct}%`;buildCnChart(key,currentCnYears)}
+function makeLabels(sy,sm,ey,em){const o=[];let y=sy,m=sm;while(y<ey||(y===ey&&m<=em)){o.push(y+'-'+String(m).padStart(2,'0'));m++;if(m>12){m=1;y++}}return o}
+const fullLabels=makeLabels(2006,10,2026,10);const N=fullLabels.length;
+function noise(i,s){const x=Math.sin(i*12.9898+1.7)*43758.5453;return(x-Math.floor(x)-0.5)*2*s}
+function ndxPath(i){const t=i/(N-1);let b;if(t<0.12)b=22+t*40;else if(t<0.20)b=27-(t-0.12)*80;else if(t<0.35)b=18+(t-0.20)*40;else if(t<0.45)b=24+(t-0.35)*30;else if(t<0.52)b=27+Math.sin((t-0.45)*30)*3;else if(t<0.58)b=28-(t-0.52)*100;else if(t<0.63)b=22+(t-0.58)*50;else if(t<0.68)b=25+(t-0.63)*250;else if(t<0.73)b=40-(t-0.68)*40;else if(t<0.78)b=38-(t-0.73)*280;else if(t<0.86)b=24+(t-0.78)*80;else if(t<0.94)b=30.5+Math.sin((t-0.86)*20)*4+(t-0.86)*15;else b=33.5-(t-0.94)*100;return b+noise(i,1.5)}
+function spxPath(i){const t=i/(N-1);let b;if(t<0.12)b=17+t*25;else if(t<0.20)b=20-(t-0.12)*70;else if(t<0.40)b=13+(t-0.20)*40;else if(t<0.55)b=21+(t-0.40)*20;else if(t<0.62)b=24-(t-0.55)*40;else if(t<0.68)b=21+(t-0.62)*200;else if(t<0.74)b=35-(t-0.68)*200;else if(t<0.88)b=23+(t-0.74)*40;else b=29-(t-0.88)*30;return b+noise(i+9,1.0)}
+function capePath(i){const t=i/(N-1);let b;if(t<0.15)b=26+t*10;else if(t<0.22)b=27-(t-0.15)*80;else if(t<0.45)b=15+(t-0.22)*40;else if(t<0.60)b=24+(t-0.45)*30;else if(t<0.68)b=28+(t-0.60)*80;else if(t<0.75)b=36-(t-0.68)*100;else if(t<0.88)b=28+(t-0.75)*50;else b=35+(t-0.88)*40;return b+noise(i+17,0.6)}
+const fullNdx=Array.from({length:N},(_,i)=>Math.max(15,Math.min(45,ndxPath(i))));const fullSpx=Array.from({length:N},(_,i)=>Math.max(10,Math.min(40,spxPath(i))));const fullCape=Array.from({length:N},(_,i)=>Math.max(12,Math.min(44,capePath(i))));fullNdx[N-1]=27.4;fullSpx[N-1]=25.7;fullCape[N-1]=40.7;
+function sliceYears(years){const months=years*12;const start=Math.max(0,N-months);return{labels:fullLabels.slice(start),ndx:fullNdx.slice(start),spx:fullSpx.slice(start),cape:fullCape.slice(start),len:N-start}}
+function cnPath(key,i,N){const t=i/(N-1);const n=(seed,scale)=>{const x=Math.sin(i*12.9898+seed)*43758.5453;return(x-Math.floor(x)-0.5)*2*scale};if(key==='hs300'){let b;if(t<0.08)b=18+t*200;else if(t<0.14)b=40-(t-0.08)*400;else if(t<0.28)b=12+(t-0.14)*30;else if(t<0.38)b=16+(t-0.28)*80;else if(t<0.45)b=24-(t-0.38)*100;else if(t<0.55)b=14+(t-0.45)*20;else if(t<0.65)b=16-(t-0.55)*30;else if(t<0.75)b=12+(t-0.65)*40;else if(t<0.88)b=16-(t-0.75)*20;else b=13.5-(t-0.88)*5;return b+n(1.1,0.9)}if(key==='sz50'){let b;if(t<0.08)b=16+t*180;else if(t<0.14)b=35-(t-0.08)*350;else if(t<0.35)b=10+(t-0.14)*25;else if(t<0.42)b=15+(t-0.35)*50;else if(t<0.55)b=13+Math.sin((t-0.42)*20)*2;else if(t<0.70)b=11+(t-0.55)*15;else if(t<0.85)b=13-(t-0.70)*10;else b=11.5-(t-0.85)*3;return b+n(2.3,0.7)}if(key==='csi500'){let b;if(t<0.08)b=30+t*250;else if(t<0.15)b=55-(t-0.08)*450;else if(t<0.30)b=22+(t-0.15)*40;else if(t<0.40)b=28+(t-0.30)*120;else if(t<0.48)b=40-(t-0.40)*200;else if(t<0.60)b=24+(t-0.48)*30;else if(t<0.72)b=28-(t-0.60)*40;else if(t<0.85)b=24+(t-0.72)*40;else b=28-(t-0.85)*10;return b+n(3.7,1.4)}if(key==='star50'){let b;if(t<0.65)b=70+Math.sin(t*15)*15;else if(t<0.72)b=80+(t-0.65)*400;else if(t<0.80)b=110-(t-0.72)*500;else if(t<0.90)b=70+(t-0.80)*150;else b=95-(t-0.90)*50;return b+n(4.2,4)}if(key==='div'){let b;if(t<0.10)b=12+t*40;else if(t<0.18)b=16-(t-0.10)*50;else if(t<0.40)b=9+(t-0.18)*10;else if(t<0.55)b=10+Math.sin((t-0.40)*18)*1.5;else if(t<0.75)b=8.5+(t-0.55)*5;else b=9+(t-0.75)*2;return b+n(5.5,0.35)}if(key==='med'){let b;if(t<0.30)b=35+t*40;else if(t<0.45)b=40+(t-0.30)*80;else if(t<0.55)b=52+(t-0.45)*200;else if(t<0.70)b=70-(t-0.55)*250;else if(t<0.85)b=35-(t-0.70)*40;else b=29-(t-0.85)*15;return b+n(6.1,1.8)}let b;if(t<0.08)b=40+t*300;else if(t<0.15)b=70-(t-0.08)*500;else if(t<0.32)b=30+(t-0.15)*50;else if(t<0.42)b=40+(t-0.32)*200;else if(t<0.50)b=60-(t-0.42)*250;else if(t<0.65)b=35+(t-0.50)*30;else if(t<0.75)b=40+(t-0.65)*120;else if(t<0.88)b=50-(t-0.75)*150;else b=32-(t-0.88)*40;return b+n(7.9,2.0)}
+function cnSeries(key,years){const d=CN[key];const months=years>=99?N:years*12;const start=Math.max(0,N-months);const labels=fullLabels.slice(start);const len=labels.length;const data=[];for(let i=start;i<N;i++){let v=cnPath(key,i,N);const[lo,hi]=d.peRange;v=Math.max(lo*0.85,Math.min(hi*1.15,v));data.push(v)}data[data.length-1]=d.pe;return{labels,data,len,p30:d.p30,med:d.med,p70:d.p70,ymin:d.peRange[0]*0.85,ymax:d.peRange[1]*1.08}}
+const commonOpts={responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a2330',titleColor:'#e8eef4',bodyColor:'#e8eef4',borderColor:'#1e2a36',borderWidth:1,filter:item=>item.datasetIndex===0,callbacks:{label:ctx=>'PE: '+ctx.parsed.y.toFixed(2)+'x'}}},scales:{x:{grid:{color:'rgba(30,42,54,0.45)'},ticks:{color:'#8b9bb0',maxRotation:0,autoSkip:true,maxTicksLimit:8}},y:{grid:{color:'rgba(30,42,54,0.45)'},ticks:{color:'#8b9bb0'}}}};
+function lineDS(data){return{data,borderColor:'#f97316',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,pointHoverRadius:3,tension:0.1}}
+function dashDS(val,color,len){return{data:Array(len).fill(val),borderColor:color,borderWidth:1.2,borderDash:[5,4],pointRadius:0,tension:0}}
+let usCharts={},cnChart=null,currentCnYears=10,currentCnKey='hs300';
+function buildUsCharts(years){const s=sliceYears(years);const specs={ndx:{el:'ndxPeChart',data:s.ndx,dashes:[27.84,31.10,34.71],ymin:18,ymax:45},spx:{el:'spxPeChart',data:s.spx,dashes:[20,22.5,26],ymin:12,ymax:40},cape:{el:'capeChart',data:s.cape,dashes:[17,28],ymin:12,ymax:45}};Object.keys(specs).forEach(k=>{const c=specs[k];if(usCharts[k])usCharts[k].destroy();const dashes=c.dashes.map((v,i)=>dashDS(v,['#22c55e','#94a3b8','#ef4444'][i],s.len));usCharts[k]=new Chart(document.getElementById(c.el),{type:'line',data:{labels:s.labels,datasets:[lineDS(c.data),...dashes]},options:{...commonOpts,scales:{...commonOpts.scales,y:{...commonOpts.scales.y,min:c.ymin,max:c.ymax}}}})})}
+function buildCnChart(key,years){const s=cnSeries(key,years);if(cnChart)cnChart.destroy();cnChart=new Chart(document.getElementById('cnPeChart'),{type:'line',data:{labels:s.labels,datasets:[lineDS(s.data),dashDS(s.p30,'#22c55e',s.len),dashDS(s.med,'#94a3b8',s.len),dashDS(s.p70,'#ef4444',s.len)]},options:{...commonOpts,scales:{...commonOpts.scales,y:{...commonOpts.scales.y,min:s.ymin,max:s.ymax}}}})}
+document.querySelectorAll('.market-tabs button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.market-tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const m=btn.dataset.market;document.getElementById('panel-us').classList.toggle('active',m==='us');document.getElementById('panel-cn').classList.toggle('active',m==='cn');if(m==='cn')renderCnCard(currentCnKey);else buildUsCharts(10)})});
+document.querySelectorAll('#cn-chips button').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('#cn-chips button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentCnKey=btn.dataset.cn;renderCnCard(currentCnKey)})});
+document.querySelectorAll('.range-btns').forEach(group=>{group.querySelectorAll('button').forEach(btn=>{btn.addEventListener('click',()=>{const years=parseInt(btn.dataset.years,10);const g=group.dataset.group;document.querySelectorAll(`.range-btns[data-group="${g}"] button`).forEach(b=>{b.classList.toggle('active',parseInt(b.dataset.years,10)===years)});if(g==='us')buildUsCharts(years);else{currentCnYears=years;buildCnChart(currentCnKey,years)}})})});
+buildUsCharts(10);
+</script></body></html>
