@@ -45,10 +45,7 @@
       letter-spacing: -0.02em;
       margin-bottom: 0.35rem;
     }
-    header p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
+    header p { color: var(--muted); font-size: 0.95rem; }
     .badge {
       display: inline-block;
       margin-top: 0.75rem;
@@ -65,75 +62,107 @@
       gap: 1.25rem;
       margin-bottom: 1.5rem;
     }
-    @media (max-width: 768px) {
-      .grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
     .card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 1.35rem 1.5rem;
+      padding: 1.25rem 1.4rem;
       box-shadow: 0 4px 24px rgba(0,0,0,0.25);
     }
     .card h2 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
     .card h2 span {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 500;
-      padding: 0.15rem 0.5rem;
+      padding: 0.12rem 0.45rem;
       border-radius: 6px;
       background: #1a2330;
       color: var(--muted);
     }
+    .verdict-tag {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.15rem;
+    }
+    .verdict-tag.fair { color: var(--orange); }
+    .verdict-tag.over { color: var(--red); }
+    .verdict-tag.under { color: var(--green); }
+    .sub-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.65rem 0.5rem;
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .metric {
+      text-align: left;
+    }
+    .metric .label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 0.15rem;
+    }
+    .metric .value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .metrics-row2 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem 0.35rem;
+    }
+    @media (max-width: 640px) {
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+      .metrics-row2 { grid-template-columns: repeat(3, 1fr); }
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      margin-top: 0.75rem;
     }
     th, td {
-      padding: 0.55rem 0.4rem;
+      padding: 0.45rem 0.3rem;
       text-align: left;
       border-bottom: 1px solid var(--border);
     }
     th {
       color: var(--muted);
       font-weight: 500;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
-    td.mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 500;
-    }
+    td.mono { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
     .status {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; }
     .over { color: var(--red); }
     .over .dot { background: var(--red); }
     .fair { color: var(--yellow); }
     .fair .dot { background: var(--yellow); }
     .under { color: var(--green); }
     .under .dot { background: var(--green); }
-    .pct {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-    }
+    .pct { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; }
     .summary { margin-top: 1.5rem; }
     .summary h3 {
       font-size: 1rem;
@@ -146,9 +175,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
-    @media (max-width: 640px) {
-      .verdict-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 640px) { .verdict-grid { grid-template-columns: 1fr; } }
     .verdict {
       background: var(--card);
       border: 1px solid var(--border);
@@ -175,7 +202,7 @@
       color: var(--muted);
     }
     .charts {
-      margin-top: 1.75rem;
+      margin-top: 1.5rem;
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.25rem;
@@ -184,7 +211,7 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 1.35rem 1.5rem 1.1rem;
+      padding: 1.25rem 1.4rem 1rem;
     }
     .chart-header {
       display: flex;
@@ -192,7 +219,7 @@
       align-items: baseline;
       justify-content: space-between;
       gap: 0.5rem 1rem;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.6rem;
     }
     .chart-header h3 { font-size: 1.05rem; font-weight: 600; }
     .chart-meta { font-size: 0.82rem; color: var(--muted); }
@@ -200,41 +227,173 @@
     .legend-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.85rem 1.25rem;
-      font-size: 0.78rem;
+      gap: 0.85rem 1.2rem;
+      font-size: 0.76rem;
       color: var(--muted);
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.5rem;
     }
     .legend-row span::before {
       content: '';
       display: inline-block;
-      width: 18px;
+      width: 16px;
       height: 2px;
-      margin-right: 6px;
+      margin-right: 5px;
       vertical-align: middle;
     }
     .leg-pe::before { background: var(--orange); }
     .leg-p30::before { background: var(--green); }
     .leg-med::before { background: #94a3b8; }
     .leg-p70::before { background: var(--red); }
-    .chart-wrap { position: relative; height: 300px; }
-    @media (max-width: 640px) { .chart-wrap { height: 250px; } }
+    .chart-wrap { position: relative; height: 280px; }
+    @media (max-width: 640px) { .chart-wrap { height: 240px; } }
+    .range-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 0.85rem;
+      justify-content: center;
+    }
+    .range-btns button {
+      background: #1a2330;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.82rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .range-btns button:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+    .range-btns button.active {
+      background: #1e3a5f;
+      border-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <h1>纳指100 & 标普500 估值看板</h1>
-      <p>Trailing PE · Forward PE · Shiller CAPE · 高估 / 低估百分比 · 历史走势</p>
+      <p>Trailing PE · Forward PE · CAPE · PB · ROE · PEG · 高估 / 低估 · 历史走势</p>
       <div class="badge">数据截至 2026年10月底 – 11月初</div>
     </header>
 
     <div class="grid">
+      <!-- 纳指100 详细指标 -->
       <div class="card">
-        <h2>标普500 <span>S&P 500</span></h2>
+        <h2>纳指100 <span>Nasdaq 100</span></h2>
+        <div class="verdict-tag fair">估值适中</div>
+        <div class="sub-hint">比过去 73% 的时间更低</div>
+        <div class="metrics-row">
+          <div class="metric">
+            <div class="label">PE (TTM)</div>
+            <div class="value">27.36</div>
+          </div>
+          <div class="metric">
+            <div class="label">PE 百分位</div>
+            <div class="value">26.96%</div>
+          </div>
+          <div class="metric">
+            <div class="label">Forward PE</div>
+            <div class="value">~21x</div>
+          </div>
+        </div>
+        <div class="metrics-row2">
+          <div class="metric">
+            <div class="label">PB</div>
+            <div class="value">8.33</div>
+          </div>
+          <div class="metric">
+            <div class="label">PB 百分位</div>
+            <div class="value">61.60%</div>
+          </div>
+          <div class="metric">
+            <div class="label">ROE</div>
+            <div class="value">30.46%</div>
+          </div>
+          <div class="metric">
+            <div class="label">股息率</div>
+            <div class="value">0.47%</div>
+          </div>
+          <div class="metric">
+            <div class="label">预测 PEG</div>
+            <div class="value">1.36</div>
+          </div>
+        </div>
         <table>
           <thead>
-            <tr><th>指标</th><th>当前值</th><th>参考均值</th><th>偏离</th><th>状态</th></tr>
+            <tr><th>指标</th><th>当前</th><th>参考</th><th>偏离</th><th>状态</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Trailing PE</td><td class="mono">27.4x</td><td class="mono">~26x</td>
+              <td class="pct fair">+5%</td>
+              <td><span class="status fair"><span class="dot"></span>适中</span></td>
+            </tr>
+            <tr>
+              <td>Forward PE</td><td class="mono">19–23x</td><td class="mono">~23x</td>
+              <td class="pct under">偏低</td>
+              <td><span class="status under"><span class="dot"></span>相对便宜</span></td>
+            </tr>
+            <tr>
+              <td>CAPE</td><td class="mono">≈58.9x</td><td class="mono">—</td>
+              <td class="pct over">极高</td>
+              <td><span class="status over"><span class="dot"></span>严重高估</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 标普500 详细指标 -->
+      <div class="card">
+        <h2>标普500 <span>S&P 500</span></h2>
+        <div class="verdict-tag over">偏贵 / 高估</div>
+        <div class="sub-hint">Trailing PE 与 CAPE 均明显高于长期中枢</div>
+        <div class="metrics-row">
+          <div class="metric">
+            <div class="label">PE (TTM)</div>
+            <div class="value">25.7</div>
+          </div>
+          <div class="metric">
+            <div class="label">Forward PE</div>
+            <div class="value">19.2</div>
+          </div>
+          <div class="metric">
+            <div class="label">Shiller CAPE</div>
+            <div class="value">40.7</div>
+          </div>
+        </div>
+        <div class="metrics-row2">
+          <div class="metric">
+            <div class="label">长期 PE 均值</div>
+            <div class="value">~17x</div>
+          </div>
+          <div class="metric">
+            <div class="label">CAPE 长期均值</div>
+            <div class="value">~17x</div>
+          </div>
+          <div class="metric">
+            <div class="label">PE 偏离</div>
+            <div class="value" style="color:var(--red)">+51%</div>
+          </div>
+          <div class="metric">
+            <div class="label">CAPE 偏离</div>
+            <div class="value" style="color:var(--red)">+139%</div>
+          </div>
+          <div class="metric">
+            <div class="label">Fwd PE 偏离</div>
+            <div class="value" style="color:var(--yellow)">+20%</div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>指标</th><th>当前</th><th>参考</th><th>偏离</th><th>状态</th></tr>
           </thead>
           <tbody>
             <tr>
@@ -248,35 +407,9 @@
               <td><span class="status fair"><span class="dot"></span>偏贵</span></td>
             </tr>
             <tr>
-              <td>Shiller CAPE</td><td class="mono">40.7x</td><td class="mono">~17x</td>
+              <td>CAPE</td><td class="mono">40.7x</td><td class="mono">~17x</td>
               <td class="pct over">+139%</td>
               <td><span class="status over"><span class="dot"></span>显著高估</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card">
-        <h2>纳指100 <span>Nasdaq 100</span></h2>
-        <table>
-          <thead>
-            <tr><th>指标</th><th>当前值</th><th>参考均值</th><th>偏离</th><th>状态</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Trailing PE</td><td class="mono">≈27.4x</td><td class="mono">~26x</td>
-              <td class="pct fair">+5%</td>
-              <td><span class="status fair"><span class="dot"></span>适中</span></td>
-            </tr>
-            <tr>
-              <td>Forward PE</td><td class="mono">19–23x</td><td class="mono">~22–24x</td>
-              <td class="pct under">-5~20%</td>
-              <td><span class="status under"><span class="dot"></span>相对便宜</span></td>
-            </tr>
-            <tr>
-              <td>Shiller CAPE</td><td class="mono">≈58.9x</td><td class="mono">—</td>
-              <td class="pct over">极高分位</td>
-              <td><span class="status over"><span class="dot"></span>严重高估</span></td>
             </tr>
           </tbody>
         </table>
@@ -284,10 +417,11 @@
     </div>
 
     <div class="charts">
+      <!-- 纳指 PE -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>纳指100 · Trailing PE 走势</h3>
-          <div class="chart-meta">当前约 <strong>27.4x</strong> · 近10年分位约 <strong>27%</strong> · 估值适中</div>
+          <div class="chart-meta">当前 <strong>27.4x</strong> · 近10年分位约 <strong>27%</strong></div>
         </div>
         <div class="legend-row">
           <span class="leg-pe">PE</span>
@@ -296,12 +430,19 @@
           <span class="leg-p70">70分位 34.71</span>
         </div>
         <div class="chart-wrap"><canvas id="ndxPeChart"></canvas></div>
+        <div class="range-btns" data-chart="ndx">
+          <button data-years="3">近3年</button>
+          <button data-years="5">近5年</button>
+          <button data-years="10" class="active">近10年</button>
+          <button data-years="20">近20年</button>
+        </div>
       </div>
 
+      <!-- 标普 PE -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>标普500 · Trailing PE 走势</h3>
-          <div class="chart-meta">当前约 <strong>25.7x</strong> · 相对长期均值仍偏高</div>
+          <div class="chart-meta">当前 <strong>25.7x</strong></div>
         </div>
         <div class="legend-row">
           <span class="leg-pe">PE</span>
@@ -310,12 +451,19 @@
           <span class="leg-p70">70分位 ~26</span>
         </div>
         <div class="chart-wrap"><canvas id="spxPeChart"></canvas></div>
+        <div class="range-btns" data-chart="spx">
+          <button data-years="3">近3年</button>
+          <button data-years="5">近5年</button>
+          <button data-years="10" class="active">近10年</button>
+          <button data-years="20">近20年</button>
+        </div>
       </div>
 
+      <!-- CAPE -->
       <div class="chart-card">
         <div class="chart-header">
           <h3>标普500 · Shiller CAPE 走势</h3>
-          <div class="chart-meta">当前约 <strong>40.7x</strong> · 接近历史极高区间</div>
+          <div class="chart-meta">当前 <strong>40.7x</strong> · 接近历史极高</div>
         </div>
         <div class="legend-row">
           <span class="leg-pe">CAPE</span>
@@ -323,6 +471,12 @@
           <span class="leg-med">近20年均值 ~28</span>
         </div>
         <div class="chart-wrap"><canvas id="capeChart"></canvas></div>
+        <div class="range-btns" data-chart="cape">
+          <button data-years="3">近3年</button>
+          <button data-years="5">近5年</button>
+          <button data-years="10" class="active">近10年</button>
+          <button data-years="20">近20年</button>
+        </div>
       </div>
     </div>
 
@@ -341,7 +495,7 @@
     </div>
 
     <div class="note">
-      <strong>说明：</strong> 曲线为近10年月度近似序列（参考公开历史形态与分位水平），用于展示相对历史位置与波动特征。不同数据源计算方法略有差异。仅供参考，不构成投资建议。
+      <strong>说明：</strong> 指标综合公开来源（参考截图风格与 GuruFocus / Siblis 等）。曲线为月度近似序列，用于展示相对历史位置与波动。时间按钮可切换 3/5/10/20 年窗口。仅供参考，不构成投资建议。
     </div>
 
     <footer>
@@ -350,83 +504,92 @@
   </div>
 
   <script>
-    // Generate dense monthly labels Oct 2016 → Oct 2026
-    function makeLabels() {
+    // Full monthly series ~2006-10 → 2026-10 (for 20Y support)
+    function makeLabels(startY, startM, endY, endM) {
       const out = [];
-      let y = 2016, m = 10;
-      while (y < 2026 || (y === 2026 && m <= 10)) {
+      let y = startY, m = startM;
+      while (y < endY || (y === endY && m <= endM)) {
         out.push(y + '-' + String(m).padStart(2, '0'));
         m++;
         if (m > 12) { m = 1; y++; }
       }
       return out;
     }
-    const labels = makeLabels();
-    const n = labels.length; // ~121 points
+    const fullLabels = makeLabels(2006, 10, 2026, 10);
+    const N = fullLabels.length;
 
-    // Simple seeded noise for jagged realistic look
     function noise(i, scale) {
-      const x = Math.sin(i * 12.9898) * 43758.5453;
+      const x = Math.sin(i * 12.9898 + 1.7) * 43758.5453;
       return (x - Math.floor(x) - 0.5) * 2 * scale;
     }
 
-    // Anchor path for Nasdaq PE matching the screenshot shape (monthly)
-    // Key regimes: 2016-17 rise, 2018 drop, 2019 recovery, 2020 spike,
-    // 2021 high, 2022 crash, 2023-25 elevated, 2026 pullback to ~27
+    // Extended path covering ~20 years
     function ndxPath(i) {
-      const t = i / (n - 1); // 0..1
+      const t = i / (N - 1);
       let base;
-      if (t < 0.08) base = 25.2 + t * 40;           // late 2016 climb
-      else if (t < 0.18) base = 28.5 + Math.sin((t-0.08)*40) * 2;
-      else if (t < 0.28) base = 30 - (t-0.18)*80;   // 2018 drop toward ~20
-      else if (t < 0.35) base = 22 + (t-0.28)*40;   // bounce
-      else if (t < 0.42) base = 25 + (t-0.35)*30;   // 2019
-      else if (t < 0.48) base = 27 + (t-0.42)*200;  // 2020 spike to ~40+
-      else if (t < 0.55) base = 39 - (t-0.48)*30;   // 2021 still high
-      else if (t < 0.62) base = 37 - (t-0.55)*180;  // 2022 crash to ~22
-      else if (t < 0.70) base = 24 + (t-0.62)*80;   // 2023 recovery
-      else if (t < 0.85) base = 30.5 + Math.sin((t-0.70)*25) * 4 + (t-0.70)*8;
-      else if (t < 0.95) base = 34 - (t-0.85)*20;   // 2025-26 drift
-      else base = 32 - (t-0.95)*90;                  // pull to ~27.4
-      return base + noise(i, 1.6);
+      if (t < 0.12) base = 22 + t * 40;              // 2006-08
+      else if (t < 0.20) base = 27 - (t-0.12)*80;     // GFC crash
+      else if (t < 0.35) base = 18 + (t-0.20)*40;     // recovery
+      else if (t < 0.45) base = 24 + (t-0.35)*30;
+      else if (t < 0.52) base = 27 + Math.sin((t-0.45)*30)*3;
+      else if (t < 0.58) base = 28 - (t-0.52)*100;    // 2018
+      else if (t < 0.63) base = 22 + (t-0.58)*50;
+      else if (t < 0.68) base = 25 + (t-0.63)*250;    // 2020 spike
+      else if (t < 0.73) base = 40 - (t-0.68)*40;
+      else if (t < 0.78) base = 38 - (t-0.73)*280;    // 2022 crash
+      else if (t < 0.86) base = 24 + (t-0.78)*80;
+      else if (t < 0.94) base = 30.5 + Math.sin((t-0.86)*20)*4 + (t-0.86)*15;
+      else base = 33.5 - (t-0.94)*100;
+      return base + noise(i, 1.5);
     }
-
     function spxPath(i) {
-      const t = i / (n - 1);
+      const t = i / (N - 1);
       let base;
-      if (t < 0.15) base = 22 + t * 20;
-      else if (t < 0.28) base = 25 - (t-0.15)*40;
-      else if (t < 0.42) base = 20 + (t-0.28)*35;
-      else if (t < 0.50) base = 25 + (t-0.42)*140;   // 2020 spike
-      else if (t < 0.58) base = 36 - (t-0.50)*160;
-      else if (t < 0.68) base = 23 + (t-0.58)*20;
-      else if (t < 0.88) base = 25 + (t-0.68)*30;
-      else base = 31 - (t-0.88)*45;
-      return base + noise(i + 7, 1.1);
+      if (t < 0.12) base = 17 + t * 25;
+      else if (t < 0.20) base = 20 - (t-0.12)*70;
+      else if (t < 0.40) base = 13 + (t-0.20)*40;
+      else if (t < 0.55) base = 21 + (t-0.40)*20;
+      else if (t < 0.62) base = 24 - (t-0.55)*40;
+      else if (t < 0.68) base = 21 + (t-0.62)*200;
+      else if (t < 0.74) base = 35 - (t-0.68)*200;
+      else if (t < 0.88) base = 23 + (t-0.74)*40;
+      else base = 29 - (t-0.88)*30;
+      return base + noise(i + 9, 1.0);
     }
-
     function capePath(i) {
-      const t = i / (n - 1);
+      const t = i / (N - 1);
       let base;
-      if (t < 0.2) base = 26 + t * 30;
-      else if (t < 0.35) base = 32 - (t-0.2)*25;
-      else if (t < 0.48) base = 28 + (t-0.35)*40;
-      else if (t < 0.55) base = 33 + (t-0.48)*70;
-      else if (t < 0.65) base = 38 - (t-0.55)*100;
-      else if (t < 0.80) base = 28 + (t-0.65)*50;
-      else base = 35.5 + (t-0.80)*25;
-      return base + noise(i + 13, 0.7);
+      if (t < 0.15) base = 26 + t * 10;
+      else if (t < 0.22) base = 27 - (t-0.15)*80;
+      else if (t < 0.45) base = 15 + (t-0.22)*40;
+      else if (t < 0.60) base = 24 + (t-0.45)*30;
+      else if (t < 0.68) base = 28 + (t-0.60)*80;
+      else if (t < 0.75) base = 36 - (t-0.68)*100;
+      else if (t < 0.88) base = 28 + (t-0.75)*50;
+      else base = 35 + (t-0.88)*40;
+      return base + noise(i + 17, 0.6);
     }
 
-    const ndxPe = Array.from({ length: n }, (_, i) => Math.max(18.5, Math.min(44, ndxPath(i))));
-    const spxPe = Array.from({ length: n }, (_, i) => Math.max(16, Math.min(40, spxPath(i))));
-    const cape  = Array.from({ length: n }, (_, i) => Math.max(20, Math.min(44, capePath(i))));
-    // pin last point
-    ndxPe[n - 1] = 27.4;
-    spxPe[n - 1] = 25.7;
-    cape[n - 1]  = 40.7;
+    const fullNdx = Array.from({ length: N }, (_, i) => Math.max(15, Math.min(45, ndxPath(i))));
+    const fullSpx = Array.from({ length: N }, (_, i) => Math.max(10, Math.min(40, spxPath(i))));
+    const fullCape = Array.from({ length: N }, (_, i) => Math.max(12, Math.min(44, capePath(i))));
+    fullNdx[N - 1] = 27.4;
+    fullSpx[N - 1] = 25.7;
+    fullCape[N - 1] = 40.7;
 
-    const commonOptions = {
+    function sliceYears(years) {
+      const months = years * 12;
+      const start = Math.max(0, N - months);
+      return {
+        labels: fullLabels.slice(start),
+        ndx: fullNdx.slice(start),
+        spx: fullSpx.slice(start),
+        cape: fullCape.slice(start),
+        len: N - start
+      };
+    }
+
+    const commonOpts = {
       responsive: true,
       maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
@@ -438,114 +601,124 @@
           bodyColor: '#e8eef4',
           borderColor: '#1e2a36',
           borderWidth: 1,
+          filter: item => item.datasetIndex === 0,
           callbacks: {
-            label: ctx => ctx.datasetIndex === 0 ? ('PE: ' + ctx.parsed.y.toFixed(2) + 'x') : null
+            label: ctx => 'PE: ' + ctx.parsed.y.toFixed(2) + 'x'
           }
         }
       },
       scales: {
         x: {
-          grid: { color: 'rgba(30,42,54,0.5)' },
+          grid: { color: 'rgba(30,42,54,0.45)' },
           ticks: {
             color: '#8b9bb0',
             maxRotation: 0,
             autoSkip: true,
-            maxTicksLimit: 8,
-            callback: function(val, idx) {
-              const lab = this.getLabelForValue(val);
-              // show year starts roughly
-              if (lab && lab.endsWith('-01')) return lab.slice(0, 4);
-              if (idx === 0 || idx === labels.length - 1) return lab;
-              return '';
-            }
+            maxTicksLimit: 8
           }
         },
         y: {
-          grid: { color: 'rgba(30,42,54,0.5)' },
+          grid: { color: 'rgba(30,42,54,0.45)' },
           ticks: { color: '#8b9bb0' }
         }
       }
     };
 
-    function makeLineDataset(data) {
+    function lineDS(data) {
       return {
         data,
         borderColor: '#f97316',
         backgroundColor: 'transparent',
-        borderWidth: 1.6,
+        borderWidth: 1.5,
         pointRadius: 0,
         pointHoverRadius: 3,
-        tension: 0.12
+        tension: 0.1
       };
     }
-    function makeDash(value, color) {
+    function dashDS(val, color, len) {
       return {
-        data: Array(n).fill(value),
+        data: Array(len).fill(val),
         borderColor: color,
-        borderWidth: 1.3,
+        borderWidth: 1.2,
         borderDash: [5, 4],
         pointRadius: 0,
         tension: 0
       };
     }
 
-    new Chart(document.getElementById('ndxPeChart'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          makeLineDataset(ndxPe),
-          makeDash(27.84, '#22c55e'),
-          makeDash(31.10, '#94a3b8'),
-          makeDash(34.71, '#ef4444')
-        ]
-      },
-      options: {
-        ...commonOptions,
-        scales: {
-          ...commonOptions.scales,
-          y: { ...commonOptions.scales.y, min: 18.5, max: 44.5 }
-        }
-      }
-    });
+    let charts = {};
 
-    new Chart(document.getElementById('spxPeChart'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          makeLineDataset(spxPe),
-          makeDash(20, '#22c55e'),
-          makeDash(22.5, '#94a3b8'),
-          makeDash(26, '#ef4444')
-        ]
-      },
-      options: {
-        ...commonOptions,
-        scales: {
-          ...commonOptions.scales,
-          y: { ...commonOptions.scales.y, min: 15, max: 40 }
+    function buildCharts(years) {
+      const s = sliceYears(years);
+      const configs = {
+        ndx: {
+          el: 'ndxPeChart',
+          data: s.ndx,
+          dashes: [
+            dashDS(27.84, '#22c55e', s.len),
+            dashDS(31.10, '#94a3b8', s.len),
+            dashDS(34.71, '#ef4444', s.len)
+          ],
+          ymin: 18, ymax: 45
+        },
+        spx: {
+          el: 'spxPeChart',
+          data: s.spx,
+          dashes: [
+            dashDS(20, '#22c55e', s.len),
+            dashDS(22.5, '#94a3b8', s.len),
+            dashDS(26, '#ef4444', s.len)
+          ],
+          ymin: 12, ymax: 40
+        },
+        cape: {
+          el: 'capeChart',
+          data: s.cape,
+          dashes: [
+            dashDS(17, '#22c55e', s.len),
+            dashDS(28, '#94a3b8', s.len)
+          ],
+          ymin: 12, ymax: 45
         }
-      }
-    });
+      };
 
-    new Chart(document.getElementById('capeChart'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          makeLineDataset(cape),
-          makeDash(17, '#22c55e'),
-          makeDash(28, '#94a3b8')
-        ]
-      },
-      options: {
-        ...commonOptions,
-        scales: {
-          ...commonOptions.scales,
-          y: { ...commonOptions.scales.y, min: 15, max: 45 }
-        }
-      }
+      Object.keys(configs).forEach(key => {
+        const c = configs[key];
+        if (charts[key]) charts[key].destroy();
+        charts[key] = new Chart(document.getElementById(c.el), {
+          type: 'line',
+          data: {
+            labels: s.labels,
+            datasets: [lineDS(c.data), ...c.dashes]
+          },
+          options: {
+            ...commonOpts,
+            scales: {
+              ...commonOpts.scales,
+              y: { ...commonOpts.scales.y, min: c.ymin, max: c.ymax }
+            }
+          }
+        });
+      });
+    }
+
+    // Initial 10Y
+    buildCharts(10);
+
+    // Range buttons — each group can switch independently, or sync all
+    document.querySelectorAll('.range-btns').forEach(group => {
+      group.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const years = parseInt(btn.dataset.years, 10);
+          // update all groups to same active state for consistency
+          document.querySelectorAll('.range-btns').forEach(g => {
+            g.querySelectorAll('button').forEach(b => {
+              b.classList.toggle('active', parseInt(b.dataset.years, 10) === years);
+            });
+          });
+          buildCharts(years);
+        });
+      });
     });
   </script>
 </body>
